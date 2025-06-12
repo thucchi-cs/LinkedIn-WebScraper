@@ -16,7 +16,7 @@ keywords = ["private credit", "direct lending", "restructuring", "opportunistic 
 # Example companies' urls
 comvest_partners = "https://www.linkedin.com/company/comvest-partners/"
 monroe_capital = "https://www.linkedin.com/company/monroe-capital/"
-google = "https://www.linkedin.com/company/google"
+google = "https://www.linkedin.com/company/google/"
 
 # Sign in to LinkedIn
 def sign_in(driver:webdriver.Chrome):
@@ -38,7 +38,7 @@ def sign_in(driver:webdriver.Chrome):
 # Check if company fits criteria given the linkedin page
 def check_fit(url:str, driver:webdriver.Chrome):
     # Navigate to company's page
-    driver.get(url)
+    driver.get(f"{url}about")
 
     # Get/display name of company
     name = driver.find_element(By.TAG_NAME, "h1")
@@ -46,34 +46,30 @@ def check_fit(url:str, driver:webdriver.Chrome):
 
     # Get headline of page
     try:
-        headline = driver.find_element(By.CLASS_NAME, "top-card-layout__headline").text.strip()
+        tagline = driver.find_element(By.CLASS_NAME, "org-top-card-summary__tagline").text.strip()
     except:
-        headline = ""
-        print("no headline found")
-
-    # Get quick info of page
-    try:
-        info = driver.find_element(By.CLASS_NAME, "line-clamp-2").text.strip()
-    except:
-        info = ""
-        print("No quick info found")
+        tagline = ""
+        print("no tagline found")
 
     # Get about us section of page
-    about = driver.find_elements(By.CLASS_NAME, "core-section-container")
-    for a in about:
-        if "about us" in a.text.lower():
-            # Check for keywords
-            for kw in keywords:
-                if kw in a.text.strip().lower() + headline.lower() + info.lower():
-                    print("keyword found")
-                    break            
-            else:
-                print("no keywords")
-                return False
+    about = driver.find_element(By.CLASS_NAME, "org-page-details-module__card-spacing")
+    # Check for keywords in about section and tagline
+    for kw in keywords:
+        if kw in about.text.strip().lower() + tagline.lower():
+            print("keyword found")
+            break            
+    else:
+        print("no keywords")
+        return False
 
+    # Quick summary of company
+    summary = driver.find_element(By.CLASS_NAME, "org-top-card-summary-info-list").text.split()
+    
     # Get followers count
-    info2 = driver.find_element(By.CLASS_NAME, "top-card-layout__first-subline").text.split()
-    followers = int(info2[-2].replace(",",""))
+    followers = summary[summary.index("followers") - 1]
+    followers = followers.replace("K", "000")
+    followers = followers.replace("M", "000000")
+    followers = int(followers)
     # Check if followers count within range
     if 300 <= followers <= 15000:
         print("good followers")
@@ -82,10 +78,14 @@ def check_fit(url:str, driver:webdriver.Chrome):
         return False
 
     # Get employees count
-    info3 = driver.find_element(By.CLASS_NAME, "face-pile__text").text.split()
-    employees = int(info3[-2].replace(",",""))
+    employees = summary[summary.index("employees") - 1]
+    if "+" in employees:
+        print("bad employees")
+        return False
+    employees = employees.split("-")
+    employees = range(int(employees[0]), int(employees[1])+1)
     # Check if employees count within range
-    if 11 <= employees <= 200:
+    if (min(employees) >= 1) and (max(employees) <= 200):
         print("good employees")
     else:
         print("bad employees")
@@ -95,8 +95,8 @@ def check_fit(url:str, driver:webdriver.Chrome):
 
 
 # Check company's fit based on criteria
-# print("\nFit criteria?", check_fit(google, driver))
 
 sign_in(driver)
 driver.get("https://www.linkedin.com/search/results/companies/")
 print(driver.current_url)
+# print("\nFit criteria?", check_fit(comvest_partners, driver))
