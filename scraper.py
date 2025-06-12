@@ -1,10 +1,41 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
+import os
 
+# Load .env file
+load_dotenv()
+
+# Set up driver
 driver = webdriver.Chrome()
+
+# Keywords to find in a company
 keywords = ["private credit", "direct lending", "restructuring", "opportunistic credit", "special situations", "private debt", "structured credit", "reorganizations"]
 
+# Example companies' urls
+comvest_partners = "https://www.linkedin.com/company/comvest-partners/"
+monroe_capital = "https://www.linkedin.com/company/monroe-capital/"
+google = "https://www.linkedin.com/company/google"
+
+# Sign in to LinkedIn
+def sign_in(driver:webdriver.Chrome):
+    # Go to LinkedIn page
+    driver.get("https://www.linkedin.com/home")
+
+    # Click sign in
+    sign_in = driver.find_element(By.CLASS_NAME, "sign-in-form__sign-in-cta")
+    print(sign_in.text)
+    sign_in.click()
+
+    # Fill out sign in form and submit
+    form = driver.find_element(By.CLASS_NAME, "login__form")
+    form.find_element(By.ID, "username").send_keys(os.getenv("LINKEDIN_EMAIL"))
+    form.find_element(By.ID, "password").send_keys(os.getenv("LINKEDIN_PWD"))
+    form.submit()
+
+
+# Check if company fits criteria given the linkedin page
 def check_fit(url:str, driver:webdriver.Chrome):
     # Navigate to company's page
     driver.get(url)
@@ -63,41 +94,9 @@ def check_fit(url:str, driver:webdriver.Chrome):
     return True
 
 
-# driver.get("https://www.linkedin.com/search/results/companies/?origin=SWITCH_SEARCH_VERTICAL&sid=WLb")
-
-# Example companies' urls
-comvest_partners = "https://www.linkedin.com/company/comvest-partners/"
-monroe_capital = "https://www.linkedin.com/company/monroe-capital/"
-google = "https://www.linkedin.com/company/google"
 # Check company's fit based on criteria
 # print("\nFit criteria?", check_fit(google, driver))
 
-
-driver.get("https://www.linkedin.com/home")
-sign_in = driver.find_element(By.CLASS_NAME, "nsm7Bb-HzV7m-LgbsSe-BPrWId")
-print(sign_in.text)
-sign_in.click()
-current_window = None
-for window in driver.window_handles:
-    if window == driver.current_window_handle:
-        current_window = window
-    else:
-        driver.switch_to.window(window)
+sign_in(driver)
+driver.get("https://www.linkedin.com/search/results/companies/")
 print(driver.current_url)
-email = driver.find_element(By.NAME, "identifier")
-print(len(driver.find_elements(By.NAME, "Passwd")))
-email.clear()
-email.send_keys("dothucchi@gmail.com")
-
-next_btn = driver.find_elements(By.TAG_NAME, "button")
-next_btn = driver.find_element(By.CLASS_NAME, "VfPpkd-LgbsSe-OWXEXe-k8QpJ")
-# print(len(next_btn))
-next_btn.click()
-# for btn in next_btn:
-#     print("\"", btn.text, "\"")
-#     if btn.text == "Next":
-#         print(btn.text)
-#         # btn.click()
-#         btn.click()
-print(driver.current_url)
-print(len(driver.find_elements(By.NAME, "Passwd")))
