@@ -20,8 +20,9 @@ monroe_capital = "https://www.linkedin.com/company/monroe-capital/"
 google = "https://www.linkedin.com/company/google/"
 
 # Scroll the page to set height
-def scroll(driver:webdriver.Chrome, h="document.body.scrollHeight"):
+def scroll(driver:webdriver.Chrome, h:str="document.body.scrollHeight"):
     driver.execute_script(f"window.scrollTo(0,{str(h)})")
+    print("scrolled", driver.execute_script("return window.scrollY"))
 
 # Sign in to LinkedIn
 def sign_in(driver:webdriver.Chrome):
@@ -38,13 +39,6 @@ def sign_in(driver:webdriver.Chrome):
     form.find_element(By.ID, "username").send_keys(os.getenv("LINKEDIN_EMAIL"))
     form.find_element(By.ID, "password").send_keys(os.getenv("LINKEDIN_PWD"))
     form.submit()
-
-    # WebDriverWait(driver, 10).until(
-    #     lambda x: x.execute_script("return document.readyState === 'complete'")
-    # )
-
-    # if "linkedin.com/feed" not in driver.current_url:
-    #     pass
 
 
 # Check if company fits criteria given the linkedin page
@@ -107,9 +101,56 @@ def check_fit(url:str, driver:webdriver.Chrome):
 
 
 # Check company's fit based on criteria
+# print(check_fit_logged_out(monroe_capital, driver))
 
 sign_in(driver)
 driver.get("https://www.linkedin.com/search/results/companies/")
+past_url = driver.current_url
+while past_url == driver.current_url:
+    pass
+urls = driver.current_url.split("?")
+url = f"{urls[0]}?page=13&{urls[1]}"
+driver.get(url)
+time.sleep(5)
+while True:
+    while past_url == driver.current_url:
+        pass
+    print(driver.current_url)
+    past_url = driver.current_url
+    found = False
+    companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
+    for c in companies:
+        name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
+        if "comvest" in name.text.lower():
+            print(name.text)
+            print("this", driver.current_url)
+            found = True
+            break
+    if found:
+        break
+    scroll(driver)
+    time.sleep(1)
+    next_btn = driver.find_element(By.CLASS_NAME, "artdeco-button--icon-right")
+    if next_btn.is_enabled():
+        next_btn.click()
+        continue
+    break
+
+
+
+# # for i in range(2):
+# time.sleep(5)
+# companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
+# # links = ["https://www.linkedin.com/company/amazon/", "https://www.linkedin.com/company/apple/"]
+# links = []
+# for c in companies:
+#     name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
+#     print(name.text)
+#     links.append(name.get_attribute("href"))
+#     # print(check_fit_logged_out(name.get_attribute("href"), check_driver))
+
+# for l in links:
+#     print(check_fit(l, driver))
 
 # time.sleep(5)
 # companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
@@ -117,35 +158,37 @@ driver.get("https://www.linkedin.com/search/results/companies/")
 # for c in companies:
 #     name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
 #     print(name.text)
+#     print(name.get_attribute("href"))
 
-for i in range(2):
-    time.sleep(5)
-    print(driver.current_url)
-    companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
-    print(len(companies))
-    for c in companies:
-        name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
-        print(name.text)
-    scroll(driver)
-    print("next elem #", len(driver.find_elements(By.CLASS_NAME, "artdeco-button--icon-right")))
-    next_btn = driver.find_element(By.CLASS_NAME, "artdeco-button--icon-right")
-    print(next_btn.text)
-    print(next_btn.is_enabled())
-    next_btn.click()
-print("out")
-url = driver.current_url
-print(url)
-url = url.replace("2", "100")
-driver.get(url)
-time.sleep(5)
-print(driver.current_url)
-companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
-print(len(companies))
-for c in companies:
-    name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
-    print(name.text)
-scroll(driver)
-print("next elem #", len(driver.find_elements(By.CLASS_NAME, "artdeco-button--icon-right")))
-next_btn = driver.find_element(By.CLASS_NAME, "artdeco-button--icon-right")
-print(next_btn.text)
-print(next_btn.is_enabled())
+# for i in range(2):
+#     time.sleep(5)
+#     print(driver.current_url)
+#     companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
+#     print(len(companies))
+#     for c in companies:
+#         name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
+#         print(name.text)
+#     scroll(driver)
+#     print("next elem #", len(driver.find_elements(By.CLASS_NAME, "artdeco-button--icon-right")))
+#     next_btn = driver.find_element(By.CLASS_NAME, "artdeco-button--icon-right")
+#     print(next_btn.text)
+#     print(next_btn.is_enabled())
+#     next_btn.click()
+# print("out")
+# url = driver.current_url
+# print(url)
+# url = url.replace("2", "100")
+# driver.get(url)
+# time.sleep(5)
+# print(driver.current_url)
+# companies = driver.find_elements(By.CLASS_NAME, "UNeRdMUvGhpkgiDasaJiuwbKqtfYq")
+# print(len(companies))
+# for c in companies:
+#     name = c.find_element(By.CLASS_NAME, "IbXSFTBYTyznEViQKLhnyJdaNacpfgWZHYkE")
+#     print(name.text)
+# scroll(driver)
+# print("next elem #", len(driver.find_elements(By.CLASS_NAME, "artdeco-button--icon-right")))
+# next_btn = driver.find_element(By.CLASS_NAME, "artdeco-button--icon-right")
+# print(next_btn.text)
+# print(next_btn.is_enabled())
+driver.close()
