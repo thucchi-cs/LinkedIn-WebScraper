@@ -1,19 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="initial-scale=1, width=device-width">
-        <!-- <link href="/static/style.css" rel="stylesheet"> -->
-        <title>Place</title>
-    </head>
+{% extends "layout.html" %}
 
-    <body>
-        <input id="company" type="text">
-        <button type="button">load</button>
+{% block body %}
+    <div>Followers</div>
+    <input id="min-followers" type="number" placeholder="any">
+    -
+    <input id="max-followers" type="number" placeholder="any">
+    
+    <div>Employees</div>
+    <input id="min-employees" type="number" placeholder="any">
+    -
+    <input id="max-employees" type="number" placeholder="any">
+
+    <div>Keywords</div>
+    <div id="keywords-container">
+        <input id="add-keywords" type="text">
+        <button id="add-keyword" type="button">+</button>
+    </div>
+
+    <div>Company</div>
+    <div id="companies-container">
+        <div id="add-company-container">
+            <input id="add-companies" type="text">
+            <button id="add-company" type="button">+</button>
+        </div>
+        <button id="search" type="button">load</button>
         <div id="wait" hidden>WAIT</div>
         <div id="data" hidden></div>
-    </body>
+    </div>
 
-    <script src="/static/script.js"></script>
-
-</html>
+{% endblock %}
