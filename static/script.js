@@ -53,13 +53,15 @@ searchBtn.addEventListener("click", async () => {
         })
     });
     
-    let data = await response.text();
+    let data = await response.json();
+    let text = await response.text()
+    console.log(data, typeof(data))
 
     document.getElementById("wait").hidden = true;
 
     let dataDiv = document.getElementById("data");
     dataDiv.hidden = false;
-    dataDiv.innerHTML = data;
+    dataDiv.innerHTML = text;
 })
 
 let addKwBtn = document.getElementById("add-keyword");

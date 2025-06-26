@@ -1,8 +1,5 @@
-import os
-from flask import Flask, render_template, redirect, request
-from supabase import create_client, Client
+from flask import Flask, render_template, request
 import scraper
-import time
 
 app = Flask(__name__)
 # flask run --debug
@@ -19,7 +16,11 @@ def load():
     data["min_employees"] = 0 if data["min_employees"] == "" else int(data["min_employees"])
     data["max_followers"] = 0 if data["max_followers"] == "" else int(data["max_followers"])
     data["max_employees"] = 0 if data["max_employees"] == "" else int(data["max_employees"])
-
+    
+    for i in range(len(data["keywords"])):
+        data["keywords"][i] = data['keywords'][i].lower()
+    
+    print(data)
     driver = scraper.open_driver()
     companies = data["companies"]
     results = {}
