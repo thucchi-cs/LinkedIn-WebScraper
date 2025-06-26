@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 import os
 
@@ -8,9 +9,12 @@ load_dotenv()
 
 # Set up driver
 def open_driver():
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("headeless")
-    driver = webdriver.Chrome(options=chrome_options)
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(options=options)
     return driver
 
 # Scroll the page to set height
