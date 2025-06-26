@@ -7,41 +7,41 @@ function clickOnEnter(input, btn) {
 }
 
 function renderTable(data) {
-  const table = document.createElement('table');
+    const table = document.createElement('table');
 
-  // Table headers
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>Company</th>
-        <th>Fit Criteria</th>
-        <th>Keyword Found</th>
-        <th>Followers</th>
-        <th>Employees</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${Object.entries(data).map(([company, info]) => {
-        const hasError = info.error !== null;
+    // Table headers
+    table.innerHTML = `
+        <thead>
+        <tr>
+            <th>Company</th>
+            <th>Fit Criteria</th>
+            <th>Keyword Found</th>
+            <th>Followers</th>
+            <th>Employees</th>
+        </tr>
+        </thead>
+        <tbody>
+        ${Object.entries(data).map(([company, info]) => {
+            const hasError = info.Error !== null;
+            const row = `
+            <tr>
+                <td>
+                ${company}
+                ${hasError ? `<div class="error-msg">${info.Error}</div>` : ''}
+                </td>
+                <td>${hasError ? '❌' : info.Passed ? '✅' : '❌'}</td>
+                <td>${hasError ? '❌' : info["Keyword found"] ? '✅' : '❌'}</td>
+                <td>${hasError ? '❌' : info.Followers ? '✅' : '❌'}</td>
+                <td>${hasError ? '❌' : info.Employees ? '✅' : '❌'}</td>
+            </tr>
+            `;
+            return row;
+        }).join('')}
+        </tbody>
+    `;
 
-        const row = `
-          <tr>
-            <td>
-              ${company}
-              ${hasError ? `<div class="error-msg">${info.error}</div>` : ''}
-            </td>
-            <td>${hasError ? '❌' : info.passed ? '✅' : '❌'}</td>
-            <td>${hasError ? '❌' : info["keyword found"] ? '✅' : '❌'}</td>
-            <td>${hasError ? '❌' : info.followers ? '✅' : '❌'}</td>
-            <td>${hasError ? '❌' : info.employees ? '✅' : '❌'}</td>
-          </tr>
-        `;
-        return row;
-      }).join('')}
-    </tbody>
-  `;
-
-  resultsTable.appendChild(table);
+    resultsTable.appendChild(table);
+    resultsTable.scrollIntoView()
 }
 
 let searchBtn = document.querySelector("#search");
@@ -50,6 +50,7 @@ let resultsTable = document.getElementById("results-table");
 searchBtn.addEventListener("click", async () => {
     spinner.style.display = 'block';
     resultsTable.innerHTML = '';
+    spinner.scrollIntoView();
 
     let allCompanies = document.querySelectorAll("#company");
     let companies = [];
