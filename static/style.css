@@ -1,0 +1,313 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0a0f2c;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+.title-section {
+  text-align: center;
+  padding-top: 10vh;
+  width: fit-content;
+  margin: auto;
+}
+
+.title-section h1 {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.title-section hr {
+  width: 80%;
+  border: none;
+  border-top: 2px solid #00ffe1;
+  margin: 1rem auto;
+  box-shadow: 0 0 8px #00ffe1;
+}
+
+/* Main Split Layout */
+.main-container {
+  width: 80%;
+  display: grid;
+  grid-template-columns: 40% 10% 50%;
+  align-items: start;
+  margin:auto;
+  margin-top: 5rem;
+  height: auto;
+}
+
+/* Left Section */
+.left-section {
+  flex: 1;
+  /* background-color: red; */
+  margin: auto;
+}
+
+.range-block {
+  margin-bottom: 3rem;
+}
+
+.range-block label {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-inputs input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #00ffe1;
+  color: white;
+  font-size: 1rem;
+  width: 100px;
+  padding: 4px;
+  outline: none;
+}
+
+.range-inputs span {
+  color: #ffffff;
+  font-size: large;
+}
+
+/* Vertical line separator */
+.divider {
+  width: 1px;
+  background-color: #00ffe1;
+  height: 100%;
+  align-self: stretch;
+}
+
+/* Right Section */
+.right-section {
+  flex: 1;
+  /* background-color: red; */
+  width: 100%;
+}
+
+.keywords-label {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
+/* Keywords Grid */
+.keyword-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+  gap: 15px;
+}
+
+/* Input Box */
+.input-box {
+  background-color: rgba(0, 170, 255, 0.2);
+  padding: 6px 10px;
+  border-radius: 10px;
+  display: flex;
+  width:100%;
+  align-items: center;
+  /* backdrop-filter: blur(4px); */
+}
+
+.input-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  font-size: 0.95rem;
+  width: 100%
+}
+
+.input-box .add-btn {
+  background-color: #00ffe1;
+  color: #0a0f2c;
+  border: none;
+  border-radius: 10px;
+  padding: 0 3px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.input-box .add-btn:hover {
+  background-color: #00ccbb;
+}
+
+/* Tag Box */
+.tag-box {
+  background-color: rgba(255, 0, 150, 0.2);
+  border-radius: 16px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+
+.remove-btn {
+  margin-left: 8px;
+  color: #ff99cc;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Company List Section */
+.company-list-section {
+  margin: 60px auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Company Item Box */
+.company-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  padding: 10px 16px;
+  width: 100%;
+  border-radius: 16px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+
+/* X button on company tags */
+.company-item .remove-btn {
+  margin-left: 12px;
+  color: #ff99cc;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Add Company Input Box */
+.add-company {
+  background-color: rgba(0, 170, 255, 0.2);
+  display: flex;
+  gap: 10px;
+}
+
+.add-company input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  font-size: 1rem;
+}
+
+.add-company button.add-btn {
+  background-color: #00ffe1;
+  color: #0a0f2c;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-company button.add-btn:hover {
+  background-color: #00ccbb;
+}
+
+/* Search Button Container */
+.search-button-container {
+  margin: 60px auto;
+  text-align: center;
+}
+
+/* Search Button Styling */
+.search-btn {
+  background-color: #00ffe1;
+  color: #0a0f2c;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 225, 0.4);
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  background-color: #00ccbb;
+  box-shadow: 0 0 15px rgba(0, 255, 225, 0.6);
+}
+
+/* Spinner (simple rotating circle) */
+.spinner {
+  margin: 30px auto;
+  border: 6px solid rgba(255, 255, 255, 0.1);
+  border-top: 6px solid #00ffe1;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Results Table Styling */
+#results-table {
+  margin: 50px auto;
+  max-width: 900px;
+  width: 100%;
+  color: white;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+#results-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#results-table th, #results-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#results-table th {
+  background-color: rgba(0, 170, 255, 0.2);
+}
+
+#results-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Error Message */
+.error-msg {
+  color: #ff6666;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}

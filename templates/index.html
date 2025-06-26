@@ -1,22 +1,86 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <div>Followers</div>
+    <div class="title-section">
+        <h1>LinkedIn WebScraper</h1>
+        <hr />
+    </div>
+
+    <div class="main-container">
+        <!-- LEFT SECTION -->
+        <div class="left-section">
+            <div class="range-block">
+                <label>Followers:</label>
+                <div class="range-inputs">
+                    <input type="number" placeholder="Min" id="min-followers"/>
+                    <span>-</span>
+                    <input type="number" placeholder="Max" id="max-followers"/>
+                </div>
+            </div>
+            <div class="range-block">
+                <label>Employees:</label>
+                <div class="range-inputs">
+                    <input type="number" placeholder="Min" id="min-employees"/>
+                    <span>-</span>
+                    <input type="number" placeholder="Max" id="max-employees"/>
+                </div>
+            </div>
+        </div>
+
+            <!-- SEPARATOR -->
+        <div class="divider"></div>
+
+            <!-- RIGHT SECTION -->
+        <div class="right-section">
+            <div class="keywords-label">Keywords</div>
+            <div class="keyword-inputs" id="keywords-container">
+                <!-- Input + Button Box -->
+                <div class="keyword-box input-box">
+                    <input id="add-keywords" type="text" placeholder="Enter keyword" />
+                    <button id="add-keyword" class="add-btn">+</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="company-list-section" id="companies-container">
+        <!-- Add New Company Box -->
+        <div class="company-item add-company" id="add-company-container" hidden>
+            <span id="limit" hidden>Number of companies limit reached</span>
+            <input id="add-companies" type="text" placeholder="Add company" />
+            <button id="add-company" class="add-btn">+</button>
+        </div>
+    </div>
+
+    <div class="search-button-container">
+        <button class="search-btn" id="search">Search</button>
+    </div>
+
+    <!-- Spinner -->
+    <div class="spinner" id="spinner" style="display: none;"></div>
+
+    <!-- Table Result -->
+    <div id="results-table"></div>
+
+
+
+    <!-- <div>Followers</div>
     <input id="min-followers" type="number" placeholder="any">
     -
     <input id="max-followers" type="number" placeholder="any">
-    
+
     <div>Employees</div>
     <input id="min-employees" type="number" placeholder="any">
     -
     <input id="max-employees" type="number" placeholder="any">
-
+    
     <div>Keywords</div>
     <div id="keywords-container">
         <input id="add-keywords" type="text">
         <button id="add-keyword" type="button">+</button>
     </div>
-
+    
     <div>Company</div>
     <div id="companies-container">
         <div id="add-company-container">
@@ -28,4 +92,23 @@
         <div id="data" hidden></div>
     </div>
 
+    <table id="results">
+        <thead>
+            <th>Company</th>
+            <th>Fit criteria</th>
+            <th>Keywords found</th>
+            <th>Followers</th>
+            <th>Employees</th>
+        </thead>
+        <tr>
+            <td>what</td>
+            <td>what</td>
+            <td>ok</td>
+        </tr>
+        <tr>
+            <td>something</td>
+            <td>nooooo</td>
+        </tr>
+    </table> -->
+    
 {% endblock %}

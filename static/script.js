@@ -6,21 +6,62 @@ function clickOnEnter(input, btn) {
     })
 }
 
+function renderTable(data) {
+  const table = document.createElement('table');
+
+  // Table headers
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Fit Criteria</th>
+        <th>Keyword Found</th>
+        <th>Followers</th>
+        <th>Employees</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${Object.entries(data).map(([company, info]) => {
+        const hasError = info.error !== null;
+
+        const row = `
+          <tr>
+            <td>
+              ${company}
+              ${hasError ? `<div class="error-msg">${info.error}</div>` : ''}
+            </td>
+            <td>${hasError ? '❌' : info.passed ? '✅' : '❌'}</td>
+            <td>${hasError ? '❌' : info["keyword found"] ? '✅' : '❌'}</td>
+            <td>${hasError ? '❌' : info.followers ? '✅' : '❌'}</td>
+            <td>${hasError ? '❌' : info.employees ? '✅' : '❌'}</td>
+          </tr>
+        `;
+        return row;
+      }).join('')}
+    </tbody>
+  `;
+
+  resultsTable.appendChild(table);
+}
+
 let searchBtn = document.querySelector("#search");
+let spinner = document.getElementById("spinner");
+let resultsTable = document.getElementById("results-table");
 searchBtn.addEventListener("click", async () => {
-    document.getElementById("wait").hidden = false;
+    spinner.style.display = 'block';
+    resultsTable.innerHTML = '';
 
     let allCompanies = document.querySelectorAll("#company");
     let companies = [];
     for (const company of allCompanies) {
-        let name = company.querySelector("span").textContent;
+        let name = company.textContent.slice(0,-1);
         companies.push(name)
     }
 
     let allKeywords = document.querySelectorAll("#keyword");
     let keywords = [];
     for (const keyword of allKeywords) {
-        let kw = keyword.querySelector("span").textContent;
+        let kw = keyword.textContent.slice(0, -1);
         keywords.push(kw);
     }
 
@@ -54,14 +95,11 @@ searchBtn.addEventListener("click", async () => {
     });
     
     let data = await response.json();
-    let text = await response.text()
     console.log(data, typeof(data))
+    renderTable(data);
 
-    document.getElementById("wait").hidden = true;
+    spinner.style.display = "none";
 
-    let dataDiv = document.getElementById("data");
-    dataDiv.hidden = false;
-    dataDiv.innerHTML = text;
 })
 
 let addKwBtn = document.getElementById("add-keyword");
@@ -78,17 +116,16 @@ addKwBtn.addEventListener("click", () => {
     let container = document.getElementById("keywords-container");
     let newKw = document.createElement("div");
     newKw.id = "keyword";
-    let kwTxt = document.createElement("span");
-    kwTxt.textContent = keyword.toLowerCase();
-    let kwDel = document.createElement("button")
-    kwDel.type = "button";
-    kwDel.textContent = "-";
+    newKw.classList.add("keyword-box", "tag-box");
+    newKw.textContent = keyword.toLowerCase();
+    let kwDel = document.createElement("span")
+    kwDel.textContent = "x";
     kwDel.id = "delete-keyword";
+    kwDel.classList.add("remove-btn");
 
-    newKw.appendChild(kwTxt);
     newKw.appendChild(kwDel);
 
-    container.insertBefore(newKw, addKwInput);
+    container.appendChild(newKw);
 
     kwDel.addEventListener("click", () => {
         container.removeChild(newKw);
@@ -112,14 +149,13 @@ addCompBtn.addEventListener("click", () => {
     let addContainer = document.getElementById("add-company-container");
     let newComp = document.createElement("div");
     newComp.id = "company";
-    let compTxt = document.createElement("span");
-    compTxt.textContent = company;
-    let compDel = document.createElement("button")
-    compDel.type = "button";
+    newComp.textContent = company;
+    newComp.classList.add("company-item");
+    let compDel = document.createElement("span")
     compDel.textContent = "x";
     compDel.id = "delete-company";
+    compDel.classList.add("remove-btn")
 
-    newComp.appendChild(compTxt);
     newComp.appendChild(compDel);
 
     container.insertBefore(newComp, addContainer);
@@ -128,7 +164,9 @@ addCompBtn.addEventListener("click", () => {
         container.removeChild(newComp);
         let allCompanies = document.querySelectorAll("#company");
         if (allCompanies.length < 5) {
-            addContainer.hidden = false;
+            addContainer.querySelector("#limit").hidden = true;
+            addCompBtn.hidden = false;
+            addCompInput.hidden = false;
         }
     })
 
@@ -136,6 +174,8 @@ addCompBtn.addEventListener("click", () => {
 
     let allCompanies = document.querySelectorAll("#company");
     if (allCompanies.length >= 5) {
-        addContainer.hidden = true;
+        addContainer.querySelector("#limit").hidden = false;
+        addCompBtn.hidden = true;
+        addCompInput.hidden = true;
     }
 })
