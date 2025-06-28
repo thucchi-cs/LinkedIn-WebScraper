@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 from dotenv import load_dotenv
 import os
 
@@ -9,12 +11,13 @@ load_dotenv()
 
 # Set up driver
 def open_driver():
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    # options = Options()
+    # options.add_argument('--headless')
+    # options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-dev-shm-usage')
 
-    driver = webdriver.Chrome(options=options)
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
     return driver
 
 # Scroll the page to set height
@@ -65,6 +68,8 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
         results["Error"] = "Could not access company's LinkedIn."
         results["Passed"] = False
         return results
+    
+    driver.save_screenshot("ss.png")
 
     if criteria["keywords"]:
         # Get headline of page
@@ -83,12 +88,14 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
 
         # Get about us section of page
         about = driver.find_elements(By.CLASS_NAME, "core-section-container")
+        print(len(about), about[2].text)
         if len(about) < 1 and len(criteria["keywords"]) > 0:
             print("no about sections")
             results["Keyword found"] = False
             results["Passed"] = False
         
         for a in about:
+            print(a.text.lower())
             if "about us" in a.text.lower():
                 # Check for keywords
                 for kw in criteria["keywords"]:
@@ -106,6 +113,9 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
                 print("no about us")
                 results["Keyword found"] = False
                 results["Passed"] = False
+        
+    else:
+        results["Keyword found"] = True
 
     # Get followers count
     try:
@@ -133,6 +143,9 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
             print("no followers")
             results["Followers"] = False
             results["Passed"] = False
+    
+    if criteria["min_followers"] == 0 and criteria["max_followers"] == 0:
+        results["Followers"] = True
 
     # Get employees count
     try:
@@ -160,5 +173,8 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
             print("no employees")
             results["Employees"] = False
             results["Passed"] = False
+
+    if criteria["min_employees"] == 0 and criteria["max_employees"] == 0:
+        results["Employees"] = True
     
     return results
