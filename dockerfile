@@ -1,28 +1,50 @@
-FROM python:3.10-slim
+# FROM ubuntu:bionic
+FROM python:3.10
 
-# Install dependencies
 RUN apt-get update && apt-get install -y \
-    wget curl unzip gnupg2 ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 xdg-utils
+    # python3 python3-pip \
+    fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
+    libnspr4 libnss3 lsb-release xdg-utils libxss1 libdbus-glib-1-2 \
+    curl unzip wget vim \
+    xvfb libgbm1 libu2f-udev libvulkan1
 
-# === Install Chrome v114 (pinned) ===
-RUN wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.198-1_amd64.deb && \
-    apt install -y ./google-chrome-stable_114.0.5735.198-1_amd64.deb && \
-    rm google-chrome-stable_114.0.5735.198-1_amd64.deb
+RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+    wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip -d /usr/bin && \
+    chmod +x /usr/bin/chromedriver && \
+    rm chromedriver_linux64.zip
 
-# === Install ChromeDriver v114.0.5735.90 (matching) ===
-ENV CHROMEDRIVER_VERSION=114.0.5735.90
-RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm /tmp/chromedriver.zip
+RUN CHROME_SETUP=google-chrome.deb && \
+    wget -O $CHROME_SETUP "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" && \
+    dpkg -i $CHROME_SETUP && \
+    # apt install $CHROME_SETUP && \
+    apt-get install -y -f && \
+    rm $CHROME_SETUP
 
-# Install Python packages
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV PYTHONUNBUFFERED=1
+ENV PATH="$PATH:/bin:/usr/bin"
 
-# Add the app
-COPY . /app
+# RUN pip3 install pyvirtualdisplay
+# RUN pip3 install Selenium-Screenshot
 WORKDIR /app
 
-# Start with Gunicorn
+# COPY requirements.txt /app
+
+COPY . /app
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install -r requirements.txt
+
+# ENTRYPOINT ["python3"]
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080"]
+# CMD ["python3", "app.py"]
+
+# ENV APP_HOME /usr/src/app
+# WORKDIR /$APP_HOME
+
+# COPY . $APP_HOME/
+
+# CMD tail -f /dev/null
+# CMD python3 app.py

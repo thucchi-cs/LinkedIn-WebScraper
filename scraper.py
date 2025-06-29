@@ -19,7 +19,7 @@ def open_driver():
     assert options.capabilities['browserVersion'] == 'stable'
 
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(executable_path="C:\Users\dothu\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32\chromedriver.exe", service=service, options=options)
     return driver
 
     # options = webdriver.ChromeOptions()

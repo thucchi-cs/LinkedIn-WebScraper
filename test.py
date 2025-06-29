@@ -1,12 +1,11 @@
-from selenium.webdriver.chrome.options import Options
-import scraper
 import time
+from selenium import webdriver
 
-# Example companies' urls
-comvest_partners = "https://www.linkedin.com/company/comvest-partners/"
-monroe_capital = "https://www.linkedin.com/company/monroe-capital/"
-google = "https://www.linkedin.com/company/google/"
-
-# driver = scraper.open_driver()
-# driver.get("https://linkedin.com/company/googel")
-# time.sleep(15)
+driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
+driver.get('http://www.google.com/')
+time.sleep(5) # Let the user actually see something!
+search_box = driver.find_element_by_name('q')
+search_box.send_keys('ChromeDriver')
+search_box.submit()
+time.sleep(5) # Let the user actually see something!
+driver.quit()
