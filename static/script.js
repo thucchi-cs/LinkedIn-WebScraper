@@ -102,6 +102,7 @@ searchBtn.addEventListener("click", async () => {
     });
     
     let data = await response.json();
+    console.log(data, typeof(data))
     renderTable(data);
 
     spinner.style.display = "none";

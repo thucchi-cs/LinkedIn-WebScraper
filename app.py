@@ -12,7 +12,7 @@ def index():
 
 @app.route("/load", methods=["POST"])
 def load():
-    # try:
+    try:
         data = request.get_json()
         data["min_followers"] = 0 if data["min_followers"] == "" else int(data["min_followers"])
         data["min_employees"] = 0 if data["min_employees"] == "" else int(data["min_employees"])
@@ -38,5 +38,5 @@ def load():
         driver.quit()
         shutil.rmtree(user_data_dir)
         return results
-    # except Exception as e:
-    #     return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
