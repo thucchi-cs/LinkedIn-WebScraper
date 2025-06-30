@@ -77,7 +77,6 @@ searchBtn.addEventListener("click", async () => {
     } else if (companies.length == 0) {
         errorMsg.hidden = false;
         errorMsg.textContent = "No companies added."
-        console.log("no companies :((");
         return
     }
 
@@ -103,7 +102,6 @@ searchBtn.addEventListener("click", async () => {
     });
     
     let data = await response.json();
-    console.log(data, typeof(data))
     renderTable(data);
 
     spinner.style.display = "none";

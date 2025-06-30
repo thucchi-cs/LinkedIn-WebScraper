@@ -6,6 +6,8 @@ An app that scrapes LinkedIn for company's information. User inputs their list o
 Add at least one criteria. You can set the minimum and maximum followers the company has on LinkedIn, or number of employees listed on LinkedIn. You can also set keywords that a company needs to have in their LinkedIn profile. Once this is set, add 1-5 companies you want to check. Pressing "search" will send data to the webscraper. After data has been processed, the website will give you a chart to show which companies passed your criteria, and which ones didn't.
 ![alt text](image.png)
 
+Depends on the number of companies you're searching for, the app might take a few minutes to load the data.
+
 ![alt text](image-1.png)
 
 ## How It Was Made

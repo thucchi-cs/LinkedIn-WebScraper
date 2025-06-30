@@ -13,7 +13,7 @@ os.environ["HOME"] = "/tmp"
 # Set up driver
 def open_driver(user_data_dir):
     options = Options()
-    print("good2")
+    # print("good2")
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -26,9 +26,9 @@ def open_driver(user_data_dir):
 
 # Scroll the page to set height
 def scroll(driver:webdriver.Chrome, h:str="document.body.scrollHeight"):
-    print("real scroll", driver.execute_script(f"return {h};"))
+    # print("real scroll", driver.execute_script(f"return {h};"))
     driver.execute_script(f"window.scrollTo(0,{str(h)})")
-    print("scrolled", driver.execute_script("return window.scrollY"))
+    # print("scrolled", driver.execute_script("return window.scrollY"))
 
 def scroll_element(driver:webdriver.Chrome, element):
     pass
@@ -61,7 +61,7 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
         driver.get(url)
 
     if (url != driver.current_url):
-        print("could not access company", url, driver.current_url)
+        # print("could not access company", url, driver.current_url)
         results["Error"] = "Could not access company's LinkedIn."
         results["Passed"] = False
         return results
@@ -69,9 +69,9 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
     # Get/display name of company
     try:
         name = driver.find_element(By.TAG_NAME, "h1")
-        print(name.text)
+        # print(name.text)
     except:
-        print("no name?")
+        # print("no name?")
         results["Error"] = "Could not access company's LinkedIn."
         results["Passed"] = False
         return results
@@ -86,39 +86,39 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
             headline = driver.find_element(By.CLASS_NAME, "top-card-layout__headline").text.strip()
         except:
             headline = ""
-            print("no headline found")
+            # print("no headline found")
 
         # Get quick info of page
         try:
             info = driver.find_element(By.CLASS_NAME, "line-clamp-2").text.strip()
         except:
             info = ""
-            print("No quick info found")
+            # print("No quick info found")
 
         # Get about us section of page
         about = driver.find_elements(By.CLASS_NAME, "core-section-container")
         if len(about) < 1 and len(criteria["keywords"]) > 0:
-            print("no about sections")
+            # print("no about sections")
             results["Keyword found"] = False
             results["Passed"] = False
         
         for a in about:
-            print(a.text.lower())
+            # print(a.text.lower())
             if "about us" in a.text.lower():
                 # Check for keywords
                 for kw in criteria["keywords"]:
                     if kw in a.text.strip().lower() + headline.lower() + info.lower():
-                        print("keyword found")
+                        # print("keyword found")
                         results["Keyword found"] = True
                         break            
                 else:
                     results["Keyword found"] = False
                     results["Passed"] = False
-                    print("no keywords")
+                    # print("no keywords")
                 break
         else:
             if len(criteria["keywords"]) > 0:
-                print("no about us")
+                # print("no about us")
                 results["Keyword found"] = False
                 results["Passed"] = False
         
@@ -133,22 +133,22 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
         if criteria["max_followers"] > 0:
             if criteria["min_followers"] <= followers <= criteria["max_followers"]:
                 results["Followers"] = True
-                print("good followers")
+                # print("good followers")
             else:
                 results["Followers"] = False
                 results["Passed"] = False
-                print("bad followers")
+                # print("bad followers")
         else:
             if criteria["min_followers"] <= followers:
-                print("good followers")
+                # print("good followers")
                 results["Followers"] = True
             else:
                 results["Followers"] = False
                 results["Passed"] = False
-                print("bad followers")
+                # print("bad followers")
     except:
         if criteria["min_followers"] != 0 or criteria['max_followers'] != 0:
-            print("no followers")
+            # print("no followers")
             results["Followers"] = False
             results["Passed"] = False
     
@@ -162,23 +162,23 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
         # Check if employees count within range
         if criteria["max_employees"] > 0:
             if criteria["min_employees"] <= employees <= criteria["max_employees"]:
-                print("good employees")
+                # print("good employees")
                 results["Employees"] = True
             else:
-                print("bad employees")
+                # print("bad employees")
                 results["Employees"] = False
                 results["Passed"] = False
         else:
             if criteria["min_employees"] <= employees:
-                print("good employees")
+                # print("good employees")
                 results["Employees"] = True
             else:
-                print("bad employees")
+                # print("bad employees")
                 results["Employees"] = False
                 results["Passed"] = False
     except:
         if criteria['min_employees'] != 0 or criteria['max_employees'] != 0:
-            print("no employees")
+            # print("no employees")
             results["Employees"] = False
             results["Passed"] = False
 

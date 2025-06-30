@@ -22,7 +22,7 @@ def load():
         for i in range(len(data["keywords"])):
             data["keywords"][i] = data['keywords'][i].lower()
         
-        print(data)
+        # print(data)
         user_data_dir = tempfile.mkdtemp()
         driver = scraper.open_driver(user_data_dir)
         companies = data["companies"]
