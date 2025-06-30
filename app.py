@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 import scraper
+import tempfile
+import shutil
 
 app = Flask(__name__)
 # flask run --debug
-
 
 @app.route("/", methods=["POST", "GET"])
 def index():
@@ -11,7 +12,7 @@ def index():
 
 @app.route("/load", methods=["POST"])
 def load():
-    try:
+    # try:
         data = request.get_json()
         data["min_followers"] = 0 if data["min_followers"] == "" else int(data["min_followers"])
         data["min_employees"] = 0 if data["min_employees"] == "" else int(data["min_employees"])
@@ -22,7 +23,8 @@ def load():
             data["keywords"][i] = data['keywords'][i].lower()
         
         print(data)
-        driver = scraper.open_driver()
+        user_data_dir = tempfile.mkdtemp()
+        driver = scraper.open_driver(user_data_dir)
         companies = data["companies"]
         results = {}
         for c in companies:
@@ -33,7 +35,8 @@ def load():
             results[c] = fit
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
-        driver.close()
+        driver.quit()
+        shutil.rmtree(user_data_dir)
         return results
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # except Exception as e:
+    #     return jsonify({"error": str(e)}), 500

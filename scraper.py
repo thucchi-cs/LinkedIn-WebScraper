@@ -8,24 +8,21 @@ import os
 
 # Load .env file
 load_dotenv()
+os.environ["HOME"] = "/tmp"
 
 # Set up driver
-def open_driver():
+def open_driver(user_data_dir):
     options = Options()
-    # options.add_argument('--headless')
+    print("good2")
+    options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.browser_version = 'stable'
     assert options.capabilities['browserVersion'] == 'stable'
 
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(executable_path="C:\Users\dothu\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32\chromedriver.exe", service=service, options=options)
+    driver = webdriver.Chrome(options=options)
     return driver
 
-    # options = webdriver.ChromeOptions()
-    # options.add_argument("--no-sandbox")
-    # driver = webdriver.Chrome(options=options)
-    # return driver
 # Scroll the page to set height
 def scroll(driver:webdriver.Chrome, h:str="document.body.scrollHeight"):
     print("real scroll", driver.execute_script(f"return {h};"))
