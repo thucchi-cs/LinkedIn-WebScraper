@@ -17,6 +17,7 @@ def open_driver(user_data_dir):
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--start-maximized")
     options.browser_version = 'stable'
     assert options.capabilities['browserVersion'] == 'stable'
 
@@ -28,6 +29,9 @@ def scroll(driver:webdriver.Chrome, h:str="document.body.scrollHeight"):
     print("real scroll", driver.execute_script(f"return {h};"))
     driver.execute_script(f"window.scrollTo(0,{str(h)})")
     print("scrolled", driver.execute_script("return window.scrollY"))
+
+def scroll_element(driver:webdriver.Chrome, element):
+    pass
 
 # Sign in to LinkedIn
 def sign_in(driver:webdriver.Chrome):
@@ -72,6 +76,8 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
         results["Passed"] = False
         return results
     
+    scroll(driver, str(185))
+    
     driver.save_screenshot("ss.png")
 
     if criteria["keywords"]:
@@ -91,7 +97,6 @@ def check_fit(url:str, driver:webdriver.Chrome, criteria:dict):
 
         # Get about us section of page
         about = driver.find_elements(By.CLASS_NAME, "core-section-container")
-        print(len(about), about[2].text)
         if len(about) < 1 and len(criteria["keywords"]) > 0:
             print("no about sections")
             results["Keyword found"] = False

@@ -48,9 +48,7 @@ let searchBtn = document.querySelector("#search");
 let spinner = document.getElementById("spinner");
 let resultsTable = document.getElementById("results-table");
 searchBtn.addEventListener("click", async () => {
-    spinner.style.display = 'block';
-    resultsTable.innerHTML = '';
-    spinner.scrollIntoView();
+    let errorMsg = document.querySelector(".error");
 
     let allCompanies = document.querySelectorAll("#company");
     let companies = [];
@@ -65,7 +63,7 @@ searchBtn.addEventListener("click", async () => {
         let kw = keyword.textContent.slice(0, -1);
         keywords.push(kw);
     }
-
+    
     let minFollowers = document.getElementById("min-followers").value;
     let maxFollowers = document.getElementById("max-followers").value;
 
@@ -73,12 +71,21 @@ searchBtn.addEventListener("click", async () => {
     let maxEmployees = document.getElementById("max-employees").value;
 
     if ((keywords.length == 0) && (minFollowers == "") && (maxFollowers == "") && (minEmployees == "") && (maxEmployees == "")) {
-        console.log("no criteria :(");
+        errorMsg.hidden = false;
+        errorMsg.textContent = "No criteria set."
         return;
     } else if (companies.length == 0) {
+        errorMsg.hidden = false;
+        errorMsg.textContent = "No companies added."
         console.log("no companies :((");
         return
     }
+
+    errorMsg.hidden = true
+
+    spinner.style.display = 'block';
+    resultsTable.innerHTML = '';
+    spinner.scrollIntoView();
     
     let response = await fetch("/load", {
         method: "POST",

@@ -311,3 +311,9 @@ body {
   font-size: 0.85rem;
   margin-top: 6px;
 }
+
+.error {
+  color: red;
+  margin: auto;
+  margin-bottom: 10px;
+}
