@@ -15,5 +15,15 @@ This website was made originally by Thuc Chi Do. ([thucchi-cs](https://github.co
 
 This website uses Python's Flask, HTML, CSS, And JavaScript. The website also utilizes Selenium to scrape LinkedIn.
 
+### Made for Hack Club
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
+<div>
+  <a href="https://shipwrecked.hackclub.com/?t=ghrm" target="_blank">
+    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/739361f1d440b17fc9e2f74e49fc185d86cbec14_badge.png" 
+         alt="This project is part of Shipwrecked, the world's first hackathon on an island!" 
+         style="width: 35%;">
+  </a>
+</div>
+
 ## Why It Was Made
 The main purpose of this website was to allow me to understand how a webscraper or a web driver works. This is my first project with such things. It is also a good tools for people looking for companies but don't want to manually look in each company's page.
